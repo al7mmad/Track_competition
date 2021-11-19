@@ -6,5 +6,4 @@ String name;
 String id;
 String major;
 String rank;
-String AA;
 }
