@@ -6,5 +6,5 @@ String name;
 String id;
 String major;
 String rank;
- Stringkndfovnodvnoidn
+String HELLOO
 }
