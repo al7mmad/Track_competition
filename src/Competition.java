@@ -5,6 +5,8 @@ public class Competition {
 	String compURL;
 	String CompDate;
 	boolean compTypeStd;
+	boolean notification;
+
 	ArrayList<Student> stdArray = new ArrayList<Student>();
 
 	Competition(String compName, String compURL, String CompDate, boolean compTypeStd) {
@@ -13,6 +15,14 @@ public class Competition {
 		this.CompDate = CompDate;
 		this.compTypeStd = compTypeStd;
 
+	}
+
+	public boolean getNotification() {
+		return notification;
+	}
+
+	public void getNotification(String compName) {
+		this.notification = notification;
 	}
 
 	public String getCompName() {
@@ -61,5 +71,4 @@ public class Competition {
 				+ ", compTypeStd=" + compTypeStd + ", stdArray=" + stdArray + "]";
 	}
 
-	
 }
