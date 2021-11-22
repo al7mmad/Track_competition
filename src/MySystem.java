@@ -25,7 +25,7 @@ public class MySystem {
 	public void addCompetition() {
 		Scanner sc = new Scanner(System.in);
 		boolean x = false;
-		boolean stdTeam = false;
+		boolean stdBased = false;
 		boolean loopStd = false;
 
 		System.out.println("Start the process of adding a team");
@@ -40,7 +40,6 @@ public class MySystem {
 					System.out.println("Please re-enter the competition name");
 					x = true;
 				} else { // base case
-//					System.out.println("1");
 					x = false;
 				}
 
@@ -57,24 +56,24 @@ public class MySystem {
 			choice = sc.next().toUpperCase();
 
 			if (choice.equals("YES") || choice.equals("NO")) {
+				loopStd = false;
 				if (choice.equals("YES")) {
-					stdTeam = true; // student based
+					stdBased = true; // student based
 					loopStd = false;
-				} else // team based
-					loopStd = false;
+				} // else => team based
 
-			} else { // wrong input
+			} else // wrong input
 				loopStd = true;
-			}
+
 		} while (loopStd);
-		Competition c1 = new Competition(name, URL, date, stdTeam);
+		Competition c1 = new Competition(name, URL, date, stdBased);
 		compArray.add(c1);
 
 	}
 
 	public void addStudent() {
 		boolean loopId = false;
-		String teamNum = "-", teamName = "-", compType = "", rank = "";
+		String teamNum = "-", teamName = "-", compType = "", rank = "", id = "";
 		LocalDate currDate = LocalDate.now();
 		LocalDate compDate = null;
 
@@ -98,8 +97,6 @@ public class MySystem {
 		System.out.println("Enter student name: ");
 		String name = sc.next();
 //		public Student(String name, String id, String major, String rank, String teamNum, String teamName) {
-
-		String id = "";
 
 		do {
 			System.out.println("Enter student ID: ");
@@ -174,12 +171,11 @@ public class MySystem {
 
 						} else { // send a remainder to the news team
 							System.out.println("Update the ranks for the " + compArray.get(i).compName
-									+ " competition\nDue Date is: " + compD);
+									+ " competition\nDue Date was: " + compD);
 							compArray.get(i).notification = true;
 						}
 					}
 				}
-
 		}
 	}
 
@@ -192,15 +188,37 @@ public class MySystem {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-		// System.out.println("Choose an option");
-		// System.out.println();
+		String option="";	
+		Scanner scan= new Scanner(System.in);
 		MySystem sys = new MySystem();
 //		sys.addCompetition();
-		sys.addCompetition();
-		sys.addStudent();
-		sys.notifaction();
-		sys.notifaction();
+//		sys.addCompetition();
+//		sys.addStudent();
+//		sys.notifaction();
+//		sys.notifaction();
+		
+		System.out.print(
+				"Enter your choice?\n\t1) Add a competition\n\t2) Add a student to a competition\n\t3) notification \n\t4) \n\t5) \n\t6) \n\t7) End\nEnter: ");
+		option = scan.next();
 
+		switch(option){
+			case "1":{
+				sys.addCompetition();
+			}
+			case "2":{
+				sys.addStudent();
+			}
+			case "3":{
+				sys.notifaction();
+			}
+			case "7":{
+				System.out.println("Terminate");
+				break;
+			}
+			default: {
+				System.out.println("Invalid option");
+			}
+		}
 //		File file2 = new File("Input.txt");
 //		Scanner scan = new Scanner(file2);
 //
