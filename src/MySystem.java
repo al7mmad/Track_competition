@@ -10,14 +10,120 @@ import java.util.Scanner;
 public class MySystem {
 	ArrayList<Competition> compArray = new ArrayList<Competition>();
 
-	public void read() throws FileNotFoundException, IOException {
+	DataFormatter Format = new DataFormatter();
 
-		File file = new File("");
-		Scanner scan = new Scanner(file);
-		while (scan.hasNext()) {
+
+	public void read() throws FileNotFoundException, IOException {
+		// Notice we had two kind of Excel file for comp. solo & team
+		try
+		{
+			//creating Workbook instance that refers to .xlsx file
+			Workbook wb = new XSSFWorkbook(new File("Competitions Participations.xlsx"));
+
+			int numberOfSheets = wb.getNumberOfSheets(); // which = num  of competitions
+//			System.out.println("Number of sheets in this excel file is: "+NumberOfSheets+"\n");
+
+
+			for(int i =0 ; i<numberOfSheets ; i++){
+				Sheet sheet = wb.getSheetAt(i);
+				Iterator<Row> RowItr = sheet.iterator();
+
+				Row row = RowItr.next();// row#1
+				String compName =   row.getCell(1).getStringCellValue() ;
+
+				row = RowItr.next();//#2
+
+				String compURL =  row.getCell(1 ).getStringCellValue() ; //why don't we use Hperlink class?
+
+				row = RowItr.next();//#3
+				String compDate =  Format.formatCellValue(row.getCell(1 )) ;
+
+//				row = RowItr.next(); //empty one row#4 // NO NEED THE RowItr Automaticaly skip it
+//				System.out.println(row.getCell(0));
+
+				row = RowItr.next(); //#5 Help me to decide whither it teams/solo based
+
+				// Now Read Competition Students Info
+				if(row.getCell(4).getStringCellValue().equals("team")){
+					Competition comp = new Competition( compName,compURL,compDate,false );
+					compArray.add(comp);
+					readStdTeamBased(RowItr,comp);
+				}
+				else{
+					Competition comp = new Competition( compName,compURL,compDate,true );
+					compArray.add(comp);
+					readStdSoloBased(RowItr,comp);
+				}
+
+
+			}
+
+//_________________________Just print it in console to check did he reed it ?
+			System.out.println("Student ID\t\tStudent Name\t\t Major\t\t Teem\t\t Teem Name\t\tRank\t\t");
+			System.out.println("__________________________________________________________________________");
+			for(Competition c : compArray){
+								System.out.println("Name--> " + c.compName + "\n" +
+						"Link--> " + c.compURL + "\n" +
+						"Date--> " + c.CompDate + "\n");
+				for(Student s : c.stdArray){
+					System.out.print(s.id + " \t" +s.name + " \t\t" +s.major + " \t\t" +s.teamNum + " \t\t" +s.teamName +" \t\t"+s.rank+"\n" );
+				}
+			}
+//________________________________________________________________________________________________
+
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	// if it is team based V
+	private void readStdTeamBased(Iterator<Row> RowItr,Competition C ){
+		ArrayList<Student> stdArr = new ArrayList<>(); // I think we should list them in App serial ID
+
+		while(RowItr.hasNext()){
+			Row row = RowItr.next();
+			Iterator<Cell> cellItr = row.cellIterator();
+			Student std = new Student(); //!
+
+			Cell cell = cellItr.next() ; // col#1  no need
+			cell = cellItr.next() ;
+			std.id = Format.formatCellValue(cell); // use this guy
+			cell = cellItr.next() ;
+			std.name = cell.getStringCellValue();
+			cell = cellItr.next() ;
+			std.major = cell.getStringCellValue();
+			cell = cellItr.next() ;
+			std.teamNum =  Format.formatCellValue(cell);
+			cell = cellItr.next() ;
+			std.teamName = cell.getStringCellValue();
+			cell = cellItr.next() ;
+			std.rank = Format.formatCellValue(cell);
+			//Now add the student to the competition
+			C.stdArray.add(std);
+		}
+	}
+	private void readStdSoloBased(Iterator<Row> RowItr , Competition C ){
+		while(RowItr.hasNext()){
+			Row row = RowItr.next();
+			Iterator<Cell> cellItr = row.cellIterator();
+			Student std = new Student(); //!
+
+			Cell cell = cellItr.next() ; // col#1  no need
+			cell = cellItr.next() ;
+			std.id = Format.formatCellValue(cell); // use this guy
+			cell = cellItr.next() ;
+			std.name = cell.getStringCellValue();
+			cell = cellItr.next() ;
+			std.major = cell.getStringCellValue();
+			cell = cellItr.next() ;
+			std.rank = Format.formatCellValue(cell);
+			//Now add the student to the competition
+			C.stdArray.add(std);
 		}
 	}
 
+//___________________________________________________________________________________
 	public void write() {
 
 	}
