@@ -6,6 +6,8 @@ public class Student {
 	String id;
 	String major;
 	String rank;
+	
+	public Student() {}
 
 	public Student(String name, String id, String major, String rank, String teamNum, String teamName) {
 
@@ -16,6 +18,7 @@ public class Student {
 		this.major = major;
 		this.rank = rank;
 	}
+	
 
 	@Override
 	public String toString() {
