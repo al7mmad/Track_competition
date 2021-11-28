@@ -5,7 +5,7 @@ public class Competition {
 	String compURL;
 	String CompDate;
 	String sheet;
-	int number;
+//	int number;
 	boolean compTypeStd;
 	boolean notification;
 
@@ -19,12 +19,12 @@ public class Competition {
 		this.sheet= sheet;
 	}
 
-	int getNumber() {
-		return number;
-	}
-	void setNumber(int number) {
-		this.number= number;
-	}
+//	int getNumber() {
+//		return number;
+//	}
+//	void setNumber(int number) {
+//		this.number= number;
+//	}
 	@Override
 	public String toString() {
 		return "Competition [compName=" + compName + ", compURL=" + compURL + ", CompDate=" + CompDate
