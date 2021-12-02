@@ -523,12 +523,12 @@ public class MySystem {
 //***********************************
 						FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
 						Workbook wb = new XSSFWorkbook(file);
+						Row RowItr = null;
 
 						sheetIndex = wb.getSheetIndex(sheetName);
 						wb.removeSheetAt(sheetIndex);
 						Sheet sheet = wb.createSheet(sheetName);
 
-						Row RowItr = null;
 
 						Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
 
@@ -685,6 +685,38 @@ public class MySystem {
 				}
 	}
 
+	public void delComp() throws IOException {
+		String compName, sheetName = "";
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Enter competition name: ");
+		compName = sc.next();
+		
+		for (Competition c : compArray)
+			if (compName.equalsIgnoreCase(c.compName)) {
+				sheetName= c.sheet;
+				break;
+				}
+//		#########
+		if(!sheetName.equals("")) {
+		FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
+		Workbook wb = new XSSFWorkbook(file);
+		
+		wb.removeSheetAt(wb.getSheetIndex(sheetName));
+		
+		
+		FileOutputStream out = new FileOutputStream(new File("Competitions Participations.xlsx"));
+
+		wb.write(out);
+		wb.close();
+		out.close();
+		
+		System.out.println("Done");
+		}
+		else
+			System.out.println("There is no competition with this name.");
+	}
+
 	public static void main(String[] args) throws IOException, InvalidFormatException, ParseException {
 		String option = "";
 		boolean x = true;
@@ -701,7 +733,7 @@ public class MySystem {
 				System.out.print(c.compName + " -");
 
 			System.out.print(
-					"\nEnter your choice?\n\t1) Add a competition\n\t2) Add a student to a competition\n\t3) notification \n\t4) View competitions \n\t5) Show a particular student \n\t6) Edit \n\t7) End\nEnter: ");
+					"\nEnter your choice?\n\t1) Add a competition\n\t2) Add a student to a competition\n\t3) notification \n\t4) View competitions \n\t5) Show a particular student \n\t6) Edit \n\t7) End \n\t8) Remove Student \n\t9) Remove Competition \nEnter: ");
 			option = sc.next();
 
 			switch (option) {
@@ -741,6 +773,10 @@ public class MySystem {
 			}
 			case "8": {
 				sys.delete();
+				break;
+			}
+			case "9": { 
+				sys.delComp();
 				break;
 			}
 			default: {
