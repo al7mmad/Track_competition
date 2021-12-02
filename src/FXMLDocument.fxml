@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="640.0" prefWidth="805.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <BorderPane prefHeight="624.0" prefWidth="703.0">
+         <top>
+            <ImageView fitHeight="136.0" fitWidth="634.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+         </top>
+         <left>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="432.0" prefWidth="86.0" />
+                  <VBox prefHeight="432.0" prefWidth="247.0">
+                     <children>
+                        <Button id="btnAddComp" fx:id="btnAddComp" mnemonicParsing="false" onAction="#btnAddCompAction" prefHeight="30.0" prefWidth="142.0" text="Add competition ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btnAddStud" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#btnAddStudAction" text="Add Student / team">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnViewCompetition" depthTest="ENABLE" mnemonicParsing="false" onAction="#btnViewCompetitionAction" prefHeight="30.0" prefWidth="142.0" text="View competition">
+                           <opaqueInsets>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button depthTest="ENABLE" layoutX="10.0" layoutY="84.0" mnemonicParsing="false" mouseTransparent="true" prefHeight="30.0" prefWidth="142.0" text="Browse">
+                           <opaqueInsets>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </opaqueInsets>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button depthTest="ENABLE" layoutX="10.0" layoutY="125.0" mnemonicParsing="false" mouseTransparent="true" prefHeight="30.0" prefWidth="142.0" text="Send email ">
+                           <opaqueInsets>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </opaqueInsets>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </left>
+         <center>
+            <Pane prefHeight="488.0" prefWidth="495.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane fx:id="PaneAddComp" prefHeight="258.0" prefWidth="333.0" visible="false">
+                     <children>
+                        <Label fx:id="lblAddComp" layoutX="52.0" layoutY="45.0" text="Enter the name of the comp: ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtAddComp" layoutX="262.0" layoutY="42.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="btnRegister" layoutX="322.0" layoutY="232.0" mnemonicParsing="false" onAction="#btnRegisterAction" prefHeight="28.0" prefWidth="97.0" text="Register">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnClear" layoutX="219.0" layoutY="232.0" mnemonicParsing="false" onAction="#btnClearAction" prefHeight="28.0" prefWidth="97.0" text="Clear">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="lblState" layoutX="222.0" layoutY="280.0" prefHeight="20.0" prefWidth="194.0" text=" ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblAddComp1" layoutX="52.0" layoutY="93.0" text="Enter the URL of the comp: ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtAddURLComp" layoutX="262.0" layoutY="90.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <Label fx:id="lblAddComp11" layoutX="52.0" layoutY="137.0" text="Enter the date of the comp: ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblAddComp111" layoutX="52.0" layoutY="179.0" text="Is the competition student based?">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="txtAddDate" layoutX="262.0" layoutY="135.0" prefHeight="28.0" prefWidth="173.0" />
+                        <RadioButton fx:id="radStudBase1" layoutX="296.0" layoutY="181.0" mnemonicParsing="false" text="Yes" />
+                        <RadioButton fx:id="radStudBase2" layoutX="378.0" layoutY="181.0" mnemonicParsing="false" text="No" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="258.0" prefWidth="333.0" visible="false" />
+                  <Pane fx:id="PaneAddStud" prefHeight="385.0" prefWidth="471.0" visible="false">
+                     <children>
+                        <Label layoutX="62.0" layoutY="117.0" text="Enter student name:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtAddStud" layoutX="272.0" layoutY="114.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <Label layoutX="62.0" layoutY="165.0" text="Enter student ID:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtAddStudID" layoutX="272.0" layoutY="162.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <Label layoutX="62.0" layoutY="217.0" prefHeight="20.0" prefWidth="136.0" text="Enter student Major:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblAddComp2" layoutX="62.0" layoutY="58.0" text="Choose competition name:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="comboComp" layoutX="270.0" layoutY="52.0" prefHeight="31.0" prefWidth="176.0" />
+                        <Label layoutX="62.0" layoutY="269.0" prefHeight="20.0" prefWidth="136.0" text="Enter student rank:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtAddStudRank" layoutX="272.0" layoutY="264.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="btnClear2" layoutX="172.0" layoutY="316.0" mnemonicParsing="false" onAction="#btnClearAction2" prefHeight="31.0" prefWidth="64.0" text="Clear" />
+                        <Button fx:id="btnAdd" layoutX="271.0" layoutY="316.0" mnemonicParsing="false" onAction="#btnAddAction" prefHeight="31.0" prefWidth="101.0" text="Add Student" />
+                        <TextField fx:id="txtAddStudMajor" layoutX="272.0" layoutY="214.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="ViewSpicficCompPane" layoutX="-2.0" layoutY="-1.0" prefHeight="505.0" prefWidth="506.0" style="-fx-background-color: #F5F5F5;" visible="false">
+                     <children>
+                        <Label layoutX="14.0" layoutY="2.0" prefHeight="23.0" prefWidth="183.0" text="Competition Name">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="39.0" text="Competition Link">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="71.0" text="Competition Date">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbCompLink" alignment="CENTER" layoutX="231.0" layoutY="41.0" prefHeight="18.0" prefWidth="245.0" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <graphic>
+                              <Hyperlink fx:id="lbCompHLink" alignment="CENTER" contentDisplay="CENTER" onAction="#HLAction" prefHeight="24.0" prefWidth="244.0" textAlignment="CENTER" />
+                           </graphic>
+                        </Label>
+                        <Label fx:id="lbCompDate" alignment="CENTER" layoutX="231.0" layoutY="70.0" prefHeight="25.0" prefWidth="245.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <MenuButton fx:id="menubtn" layoutX="231.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="290.0" text="MenuButton">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </MenuButton>
+                        <ScrollPane fx:id="paneViewStdInfo" layoutX="6.0" layoutY="113.0" pannable="true" prefHeight="387.0" prefWidth="594.0" vbarPolicy="ALWAYS" visible="false">
+                           <content>
+                              <TableView fx:id="TableSoloStd" editable="true" prefHeight="373.0" prefWidth="583.0" visible="false">
+                                <columns>
+                                  <TableColumn fx:id="serialNumCol" prefWidth="41.33334481716156" resizable="false" style="-fx-alignment: CENTER;" text="#" />
+                                  <TableColumn fx:id="stdIDCol" prefWidth="180.66664505004883" style="-fx-alignment: CENTER;" text="Student ID " />
+                                    <TableColumn fx:id="stdNameCol" prefWidth="190.0000762939453" style="-fx-alignment: CENTER;" text="Student Name" />
+                                    <TableColumn fx:id="stdMajorCol" minWidth="0.0" prefWidth="108.00009155273438" style="-fx-alignment: CENTER;" text="Major" />
+                                    <TableColumn fx:id="stdRankCol" prefWidth="59.33331298828125" style="-fx-alignment: CENTER;" text="Rank" />
+                                </columns>
+                              </TableView>
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane fx:id="paneViewStdInfoTeam" layoutX="-18.0" layoutY="113.0" pannable="true" prefHeight="386.0" prefWidth="621.0" vbarPolicy="ALWAYS" visible="false">
+                           <content>
+                              <TableView fx:id="TableTeamStd" editable="true" prefHeight="373.0" prefWidth="604.0" visible="false">
+                                 <columns>
+                                    <TableColumn fx:id="serialNumCol1" prefWidth="25.333373427391052" resizable="false" style="-fx-alignment: CENTER;" text="#" />
+                                    <TableColumn fx:id="stdIDCol1" prefWidth="100.66665458679199" style="-fx-alignment: CENTER;" text="Student ID " />
+                                    <TableColumn fx:id="stdNameCol1" prefWidth="156.6666488647461" style="-fx-alignment: CENTER;" text="Student Name" />
+                                    <TableColumn fx:id="stdMajorCol1" minWidth="0.0" prefWidth="70.00009155273438" style="-fx-alignment: CENTER;" text="Major" />
+                                    <TableColumn fx:id="teamNumCol" prefWidth="68.66668701171875" style="-fx-alignment: CENTER;" text="Team&#10;Number" />
+                                    <TableColumn fx:id="teamNameCol" prefWidth="128.66671752929688" style="-fx-alignment: CENTER;" text="Team&#10;Name" />
+                                    <TableColumn fx:id="stdRankCol1" prefWidth="49.99993896484375" style="-fx-alignment: CENTER;" text="Rank" />
+                                 </columns>
+                              </TableView>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
