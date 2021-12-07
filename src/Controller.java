@@ -1,4 +1,3 @@
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -9,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -301,10 +302,10 @@ public class Controller implements Initializable {
             lblState.setTextFill(Color.GREEN);
             }
             @FXML
-            private void btnViewCompetitionAction(ActionEvent event2) {
+            private void btnViewCompetitionAction(ActionEvent event3) { //*****
                 ViewSpicficCompPane.setVisible(true);
 //                ViewCompsPane.setVisible(false);
-                PaneAddComp.setVisible(false);
+                PaneAddComp.setVisible(false); // create method that ensure that all panes are un visible
                 PaneAddStud.setVisible(false);
 
                 serialNumCol.setCellValueFactory(new PropertyValueFactory<Student, Integer>("serial"));
@@ -342,6 +343,20 @@ public class Controller implements Initializable {
                             if(MySystem.compArray.get(j).compTypeStd){
                                 TableSoloStd.setItems(items);
 
+                                TableSoloStd.setRowFactory(tv -> {
+                                    TableRow<Student> row = new TableRow<>();
+                                    row.setOnMouseClicked( event2 -> {
+                                        if (! row.isEmpty() && event2.getButton()== MouseButton.PRIMARY
+                                                && event2.getClickCount() == 2) {
+
+                                            Student clickedRow = row.getItem();
+                                            printRow(clickedRow);
+                                            MySystem.OpenEmail(clickedRow.id , menubtn.getText());
+                                            //^ TEST
+                                        }
+                                    });
+                                    return row ;
+                                });
                                 paneViewStdInfoTeam.setVisible(false);
                                 TableTeamStd.setVisible(false); //solo! provide if here
 
@@ -351,14 +366,30 @@ public class Controller implements Initializable {
                             else{
                                 TableTeamStd.setItems(items);
 
+                                TableTeamStd.setRowFactory(tv -> {
+                                    TableRow<Student> row = new TableRow<>();
+                                    row.setOnMouseClicked( event2 -> {
+                                        if (! row.isEmpty() && event2.getButton()== MouseButton.PRIMARY
+                                                && event2.getClickCount() == 2) {
+
+                                            Student clickedRow = row.getItem();
+                                            printRow(clickedRow);
+                                            MySystem.OpenEmail(clickedRow.id , menubtn.getText());
+                                            //^ TEST
+                                        }
+                                    });
+                                    return row ;
+                                });
+
                                 paneViewStdInfo.setVisible(false);
                                 TableSoloStd.setVisible(false); //solo! provide if here
 
                                 paneViewStdInfoTeam.setVisible(true);
                                 TableTeamStd.setVisible(true); //solo! provide if here
+
+
                             }
                         });
-
 
                         menubtn.getItems().add(mt);
                         listOfComps.add(mt);
@@ -368,6 +399,9 @@ public class Controller implements Initializable {
 
                 }
 
+        }
+        private void printRow(Student item) {
+            System.out.println(item.toString());
         }
 
         @FXML
@@ -390,7 +424,16 @@ public class Controller implements Initializable {
             return null;
         }
 
+    @FXML
+    void MOSAction(MouseEvent event) { /// i think i added to just one pane not both
+//                event.
+        System.out.println("Mos Hi");
+
+    }
+
+
 
 
 
 }
+
