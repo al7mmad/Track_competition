@@ -15,8 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Button;
@@ -26,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Controller implements Initializable {
     private static ArrayList<MenuItem> listOfComps = new ArrayList<MenuItem>();
@@ -42,6 +45,9 @@ public class Controller implements Initializable {
     protected String id;
     protected String major;
     protected String rank;
+
+    @FXML
+    private Pane PaneAddStudExtra;
 
     @FXML
     private MenuItem HiItem;
@@ -95,9 +101,6 @@ public class Controller implements Initializable {
     private Button btnViewCompetition;
 
     @FXML
-    private ComboBox<?> comboComp;
-
-    @FXML
     private Label lbCompDate;
 
     @FXML
@@ -123,6 +126,8 @@ public class Controller implements Initializable {
 
     @FXML
     private Label lblState;
+//    @FXML
+//    private Label lblState1;
 
     @FXML
     private MenuButton menubtn;
@@ -132,9 +137,6 @@ public class Controller implements Initializable {
 
     @FXML
     private RadioButton radStudBase1;
-
-    @FXML
-    private RadioButton radStudBase2;
 
     @FXML
     private TableColumn<Student, Integer> serialNumCol;
@@ -191,10 +193,25 @@ public class Controller implements Initializable {
     @FXML
     private TextField txtAddURLComp;
 
+    @FXML
+    private MenuButton comboCompABD;
+
+    @FXML
+    private TextField txtAddTeamNum;
+    @FXML
+    private TextField txtAddTeamName;
+    @FXML
+    private Label lblTeamNum;
+    @FXML
+    private Label lblTeamName;
+
+    protected String competitionName;
+    protected String teamNum;
+    protected String teamName;
 
     @FXML
     void menuButtonAction(ActionEvent event) {
-        System.out.println("hello menu");
+
     }
 
 
@@ -216,36 +233,20 @@ public class Controller implements Initializable {
             PaneAddStud.setVisible(false);
 //            ViewCompsPane.setVisible(false);
             ViewSpicficCompPane.setVisible(false);
+            lblState.setVisible(false);
+            txtAddComp.setText("");
+            txtAddURLComp.setText("");
+            txtAddDate.setValue(null);
+            radStudBase1.setSelected(false);
 
-//        PaneViewComp.setVisible(false);
 
             PaneAddComp.setVisible(true);
+            txtAddDate.setEditable(false);
 
         }
 
         @FXML
         private void handleButtonAction(ActionEvent event) {
-
-        }
-
-        @FXML
-        private void btnRegisterAction(ActionEvent event) throws IOException {
-
-            compName = txtAddComp.getText();
-            URL = txtAddURLComp.getText();
-            date = txtAddDate.getValue(); //Chack the format
-
-            if (radStudBase1.isSelected()) {
-                choice = "YES";
-            } else if (radStudBase2.isSelected()) {
-                choice = "NO";
-            }
-
-            // Call the function >> Don't forget to fix the parameter ..
-            CompetitionApplication.getInstance().addCompetition(compName, URL, date, choice);
-
-            lblState.setText("You're register successfully");
-            lblState.setTextFill(Color.GREEN);
 
         }
 
@@ -259,48 +260,6 @@ public class Controller implements Initializable {
             lblState.setTextFill(Color.BLACK);
         }
 
-        @FXML
-        private void btnAddStudAction(ActionEvent event) {
-
-            PaneAddStud.setVisible(true);
-//            ViewCompsPane.setVisible(true);
-
-//        PaneViewComp.setVisible(false);
-
-            PaneAddComp.setVisible(false);
-//            ViewCompsPane.setVisible(false);
-            ViewSpicficCompPane.setVisible(false);
-
-
-        }
-
-        @FXML
-        private void btnClearAction2(ActionEvent event) {
-
-            txtAddStud.setText("");
-            txtAddStudID.setText("");
-            txtAddStudMajor.setText("");
-            txtAddStudRank.setText("");
-        }
-
-        @FXML
-        private void btnAddAction(ActionEvent event) throws IOException {
-
-            //        comboComp.getItems().add("Choice 1");
-
-            name = txtAddStud.getText();
-            id = txtAddStudID.getText();
-            major = txtAddStudMajor.getText().toUpperCase();
-            rank = txtAddStudRank.getText();
-
-
-
-            //Call function ..
-            CompetitionApplication.getInstance().addStudent(name, id, major, rank);
-
-            lblState.setText("You're added successfully");
-            lblState.setTextFill(Color.GREEN);
-            }
             @FXML
             private void btnViewCompetitionAction(ActionEvent event3) { //*****
                 ViewSpicficCompPane.setVisible(true);
@@ -324,10 +283,20 @@ public class Controller implements Initializable {
                 teamNameCol.setCellValueFactory(new PropertyValueFactory<Student, String>("teamName"));
 
 
-                if (viewCompClicked) {
+//                if (viewCompClicked) {
+//                    System.out.println(MySystem.compArray.size());
+
+                menubtn.getItems().clear(); // Should clear the menu
                     for (int i = 0; i < MySystem.compArray.size(); i++) {
                         MenuItem mt = new MenuItem(MySystem.compArray.get(i).compName);
+                        menubtn.getItems().add(mt);
+                        listOfComps.add(mt);
+//                        viewCompClicked = false; no need?
+
                         final int j = i ;
+
+
+                        //View a spicific comp after cliciking its name
                         mt.setOnAction( event -> {
                             menubtn.setText(mt.getText());
                             lbCompHLink.setText( MySystem.compArray.get(j).compURL );
@@ -391,13 +360,11 @@ public class Controller implements Initializable {
                             }
                         });
 
-                        menubtn.getItems().add(mt);
-                        listOfComps.add(mt);
-                        viewCompClicked = false;
+
                     }
 
 
-                }
+//                }
 
         }
         private void printRow(Student item) {
@@ -407,18 +374,30 @@ public class Controller implements Initializable {
         @FXML
         void HLAction(ActionEvent event) {
             Platform.setImplicitExit(false);
-            update(new WebViewExample() , "");
-            WebViewExample.main( null);
+            WebViewExample wv = new WebViewExample();
+            update(wv , "");
+//            wv.setCompetition(Competition.search(menubtn.getText())); // i need comp obj ! here
+            try{//Test
+                wv.main( null);
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
 
         }
 
         public void update(Observable o, Object arg) {
             Platform.runLater(new Runnable() {
                 public void run() {
-                    new WebViewExample().start(new Stage());
+                    WebViewExample wv = new WebViewExample();
+                    wv.setCompetition(Competition.search(menubtn.getText()));
+                    wv.start(new Stage());
                 }
             });
     }
+
+
 
         private EventHandler<ActionEvent> ListOfCompBtnsAction(ActionEvent event){
             return null;
@@ -432,8 +411,238 @@ public class Controller implements Initializable {
     }
 
 
+        @FXML
+        private TextField txtAddDateComp;
+
+        @FXML
+        private DatePicker pick;
 
 
 
+
+
+
+        //    @FXML
+//    protected void handleSubmitButtonRegister() throws IOException {
+//        //
+//        //Here I want to invoke gotoRegister
+//        CompetitionApplication.getInstance().gotoRegister();
+//    }
+
+
+
+        // replace pick --> txtAddDate
+        @FXML
+        private void btnRegisterAction(ActionEvent event) throws IOException, InvalidFormatException, ParseException {
+
+            String m=txtAddDate.getValue().getMonthValue()+"";
+            String d=txtAddDate.getValue().getDayOfMonth()+"";
+            if(d.length()==1)
+                d="0"+d;
+            if(m.length()==1)
+                m="0"+m;
+            //System.out.println(pick.getValue().getYear()+"-"+m+"-"+d);
+            String t1 =txtAddComp.getText();
+            String t2 =txtAddURLComp.getText();
+            //String t3 =txtAddDateComp.getText();
+            String t3=txtAddDate.getValue().getYear()+"-"+m+"-"+d;
+
+
+
+
+
+//    		System.out.println(MySystem.getCompArray().toString());
+//    		System.out.println(MySystem.getCompArray().size());
+
+            boolean flag=true;
+            System.out.println(MySystem.compArray.toString());
+            for (Competition c : MySystem.compArray) { // will check whiter this competition exists before or not
+                System.out.println(c.compName);
+                //caseupper
+                System.out.println(t1 +" | "+ c.compName);
+                if (t1.equals(c.compName)) { //*
+                    System.out.println("The competition is already added. Please re-enter the competition name");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Addidtion faild");
+                    alert.setHeaderText("The competition is already added. Please re-enter the competition name");
+                    alert.setContentText("");
+                    alert.showAndWait();
+                    flag=false;
+                }
+            }
+            if(flag){
+                MySystem.addCompetition(t1,t2,t3,!radStudBase1.isSelected());
+                lblState.setVisible(true);
+                lblState.setText("You're register successfully");
+                lblState.setTextFill(Color.GREEN);
+
+            }
+            txtAddComp.setText("");
+            txtAddURLComp.setText("");
+            txtAddDate.setValue(null);
+            radStudBase1.setSelected(false);
+
+
+
+//    		}
+        }
+
+
+
+
+
+//        @FXML
+//        void HLAction(ActionEvent event) {
+//            Platform.setImplicitExit(false);
+//            update(new WebViewExample() , "");
+//            WebViewExample.main( null);
+//
+//        }
+
+//        public void update(Observable o, Object arg) {
+//            Platform.runLater(new Runnable() {
+//                public void run() {
+//                    new WebViewExample().start(new Stage());
+//                }
+//            });
+//        }
+//______________________________________________________
+@FXML
+private void btnAddStudAction(ActionEvent event) throws IOException {
+
+    PaneAddStud.setVisible(true);
+    PaneAddComp.setVisible(false);
+    ViewSpicficCompPane.setVisible(false);
+    PaneAddStudExtra.setVisible(false);
+
+// Already read before in the consil menu I think
+    MySystem.read();
+
+    // Complete this
+        /*
+
+            we need to get the data(competition names) from Excel sheet
+
+
+         */
+    comboCompABD.getItems().clear(); // Should clear the menu
+    for (int i = 0; i < MySystem.compArray.size(); i++) {
+        MenuItem mt = new MenuItem(MySystem.compArray.get(i).compName);
+        comboCompABD.getItems().add(mt);
+        listOfComps.add(mt);
+
+        mt.setOnAction( eventABD -> { //choose a spicific comp to registe ! allert
+            comboCompABD.setText(mt.getText());
+            Competition c = Competition.search(mt.getText()); // gIve me obj
+            boolean ABDisTeam = !c.compTypeStd;
+            if(ABDisTeam){
+                PaneAddStudExtra.setVisible(true);
+            }
+            else{
+                PaneAddStudExtra.setVisible(false);
+            }
+
+        });
+    }
 }
+
+
+
+
+
+    @FXML
+    private void btnClearAction2(ActionEvent event) {
+
+        // comboComp.setValue("     "); // Let combo box choose first option which is empty
+        txtAddStud.setText("");
+        txtAddStudID.setText("");
+        txtAddStudMajor.setText("");
+        txtAddStudRank.setText("");
+
+        txtAddTeamNum.setText("");
+        txtAddTeamName.setText("");
+
+    }
+
+
+
+    @FXML
+    private void btnAddAction(ActionEvent event) throws IOException, InvalidFormatException {
+
+        competitionName =  comboCompABD.getText(); // Change line 102 to String + Make sure the method is correct
+        name = txtAddStud.getText();
+        id = txtAddStudID.getText();
+        major = txtAddStudMajor.getText().toUpperCase();
+        rank = txtAddStudRank.getText();
+
+        if(!Competition.search(competitionName).compTypeStd){ //team based
+            teamNum = txtAddTeamNum.getText();
+            teamName = txtAddTeamName.getText();
+            try{
+                MySystem.addStudent(competitionName, name, id, major, rank, teamNum, teamName);
+            }
+            catch (Exception e){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Addidtion faild");
+                alert.setHeaderText("The student is already added. Please re-enter the student data");
+                alert.setContentText("");
+                alert.showAndWait();
+            }
+        }
+        else {
+            try{
+                MySystem.addStudent(competitionName, name, id, major, rank , "-" , "-");
+            }
+            catch (Exception e){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Addidtion faild");
+                alert.setHeaderText("The student is already added. Please re-enter the student data");
+                alert.setContentText("");
+                alert.showAndWait();
+            }
+        }
+        // Reset the value ..
+        comboCompABD.setText(null); // Let combo box choose first option which is empty
+        txtAddStud.setText("");
+        txtAddStudID.setText("");
+        txtAddStudMajor.setText("");
+        txtAddStudRank.setText("");
+        txtAddTeamNum.setText("");
+        txtAddTeamName.setText("");
+        //Successfully message
+        lblState.setText("You're added successfully");
+        lblState.setTextFill(Color.GREEN);
+    }
+    @FXML
+    private void panestudentAction(MouseEvent event) {
+
+        if (comboCompABD.getText() != "") {
+
+            txtAddStud.setVisible(true);
+            txtAddStudID.setVisible(true);
+            txtAddStudMajor.setVisible(true);
+            txtAddStudRank.setVisible(true);
+            Competition cpt = Competition.search(comboCompABD.getText());
+            boolean compTypeStdTemp = cpt.compTypeStd ;
+
+            if (compTypeStdTemp == false) {
+
+                txtAddTeamNum.setVisible(true);
+                txtAddTeamName.setVisible(true);
+
+            } else if (compTypeStdTemp == true) {
+                txtAddTeamNum.setVisible(false);
+                txtAddTeamName.setVisible(false);
+
+            }
+    }
+
+
+    }
+}
+
+
+
+
+
 
