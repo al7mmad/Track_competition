@@ -5,19 +5,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.*;
 
+import javafx.scene.control.Alert;
+import javafx.scene.paint.Color;
 import org.apache.poi.hssf.model.RowBlocksReader;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -26,13 +24,17 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 //import com.sun.rowset.internal.Row;
-// may set menu to null after leave the pane. 
+// may set menu to null after leave the pane.
+// for the write make the excel file format as the one was there
+// Add edit --> is it need it ?
+// feh mshkl fe alformat fe al excel for add stdF
 public class MySystem {
     static ArrayList<Competition> compArray = new ArrayList<Competition>();
-    DataFormatter Format = new DataFormatter();
+    private static DataFormatter Format = new DataFormatter() ;
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-mm-dd");
 
-    public void read() throws FileNotFoundException, IOException {
+    // become static
+    public static void read() throws FileNotFoundException, IOException {
         String sheetName = "";
         compArray.clear();
 
@@ -124,7 +126,7 @@ public class MySystem {
     }
 
     // if it is team based V
-    private void readStdTeamBased(Iterator<Row> RowItr, Competition C) {
+    private static void readStdTeamBased(Iterator<Row> RowItr, Competition C) {
         // ^ Add it for serial num
         while (RowItr.hasNext()) {
             Row row = RowItr.next();
@@ -145,7 +147,7 @@ public class MySystem {
             String std_teamName = cell.getStringCellValue();
             cell = cellItr.next();
             String std_rank = Format.formatCellValue(cell);
-            Student std = new Student(std_serial, std_name, std_id, std_major, std_rank, std_teamNum, std_teamName);
+            Student std = new Student( std_serial, std_name, std_id, std_major, std_rank, std_teamNum, std_teamName);
 
             // Now add the student to the competition
             C.stdArray.add(std);
@@ -153,7 +155,7 @@ public class MySystem {
         // here C****
     }
 
-    private void readStdSoloBased(Iterator<Row> RowItr, Competition C) {
+    private static void readStdSoloBased(Iterator<Row> RowItr, Competition C) {
         while (RowItr.hasNext()) {
             Row row = RowItr.next();
             Iterator<Cell> cellItr = row.cellIterator();
@@ -180,126 +182,256 @@ public class MySystem {
     // ___________________________________________________________________________________
     // D*** write() no need
 
-    public void addCompetition() throws IOException, InvalidFormatException, ParseException {
-        String compName = "";
-        boolean x = false, stdBased = false, loopStd = false;
-        Scanner sc = new Scanner(System.in);
+//    public void addCompetition() throws IOException, InvalidFormatException, ParseException {
+//        String compName = "";
+//        boolean x = false, stdBased = false, loopStd = false;
+//        Scanner sc = new Scanner(System.in);
+//
+//        System.out.println("Start the process of adding a team\n");
+//
+//        do {
+//            System.out.println("Enter the name of the comp: ");
+//            compName = sc.next();
+//            for (Competition c : compArray) {
+//                if (compName.equalsIgnoreCase(c.compName) || compName.equalsIgnoreCase(c.sheet)) {
+//                    System.out.println("The competition is already added. Please re-enter the competition name");
+//                    x = true;
+//                    break;
+//                } else { // base case
+//                    x = false;
+//                }
+//
+//            }
+//        } while (x);
+//
+//        System.out.println("Enter the URL of the comp: ");
+//        String URL = sc.next();
+//        System.out.println("Enter the date of the comp [yyyy-mm-dd]: ");
+//        String date = sc.next();
+//        date = dateParser(date);
+//        String choice = "";
+//        do {
+//            System.out.println("Is the competition student based? [yes/no]");
+//            choice = sc.next().toUpperCase();
+//
+//            if (choice.equals("YES") || choice.equals("NO")) {
+//                loopStd = false;
+//                if (choice.equals("YES")) {
+//                    stdBased = true; // student based
+//                    loopStd = false;
+//                } // else => team based
+//
+//            } else // wrong input
+//                loopStd = true;
+//
+//        } while (loopStd);
+//        Competition c1 = new Competition(compName, URL, date, stdBased, compName);
+//        compArray.add(c1);
+//
+////		------------------
+////		Here we deal with the excel file
+//        FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
+//        Workbook wb = new XSSFWorkbook(file);
+//        Sheet sheet = wb.createSheet(compName);
+//        Row RowItr = null;
+//
+//        Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
+//
+//        studentData.put("1", new Object[] { "Competition Name", compName });
+//        studentData.put("2", new Object[] { "Competition URL", URL });
+//        studentData.put("3", new Object[] { "Competition date", date });
+////        studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
+////***** Now It is an actual empty row ✔
+//
+//
+//        // Student based
+//        if (stdBased)
+//            studentData.put("5", new Object[] { "", "Student ID", "Student Name", "Major", "Rank" });
+//        else
+//            studentData.put("6",
+//                    new Object[] { "", "Student ID", "Student Name", "Major", "team", "Team Name", "Rank" });
+//
+//        // writing the data into the sheets...
+//
+//        Set<String> keyid = studentData.keySet();
+//
+//        int rowid = 0;
+//
+//        for (String key : keyid) {
+//            RowItr = sheet.createRow(rowid++);
+//            Object[] objectArr = studentData.get(key);
+//            int cellid = 0;
+//
+//            for (Object obj : objectArr) {
+//                Cell cell = (RowItr).createCell(cellid++);
+//                cell.setCellValue((String) obj);
+//            }
+//        }
+////		file.close();
+//        FileOutputStream out = new FileOutputStream(new File("Competitions Participations.xlsx"));
+//
+//        wb.write(out);
+//        wb.close();
+//        out.close();
+//
+//        System.out.println("1Done\n");
+//
+//    }
 
-        System.out.println("Start the process of adding a team\n");
+//    public void SaddStudent() throws InvalidFormatException, IOException, NullPointerException {
+//        // First student will be at ROW6!
+//        Scanner sc = new Scanner(System.in);
+//        boolean loopId = false, cNameCheck = false;
+//
+//        // Printing comp names
+//        System.out.print("\nCompetition names: ");
+//        for (Competition c : compArray)
+//            System.out.print(c.compName + " - ");
+//
+//        String teamNum = "-", teamName = "-", compType = "", rank = "", id = "", sheetName = "";
+//        LocalDate currDate = LocalDate.now();
+//        LocalDate compDate = null;
+//
+//        System.out.println("\n\nStart the process of adding a student");
+//
+//        System.out.println("Enter competition name: ");
+//        String compName = sc.next();
+//        for (Competition c : compArray) {
+////			System.out.println(c.compName); //checking
+//            if (compName.equalsIgnoreCase(c.compName))
+//                cNameCheck = true;
+//        }
+//        if (!cNameCheck)
+//            throw new IllegalArgumentException("There is no competition with this name! ");
+//
+//        // Automating competition type & student Rank
+//        for (Competition c : compArray)
+//            if (c.compName.equalsIgnoreCase(compName)) {
+//                if (c.compTypeStd) // true == student based
+//                    compType = "STUDENT";
+//
+//                compDate = LocalDate.parse(c.CompDate); // to get competition date
+//
+//            }
+//
+//        System.out.println("Enter student first name: ");
+//        String name = sc.next();
+//        System.out.println("Enter student last name: ");
+//        name += " " + sc.next();
+//
+//        do {
+//            System.out.println("Enter student ID: ");
+//            id = sc.next();
+//            for (Competition c : compArray) {
+//                if (c.compName.equalsIgnoreCase(compName)) {
+//                    for (Student s : c.stdArray) {
+//                        if (s.id.equals(id)) {
+//                            // once we find the ID we stop &leave student loop, but we ask again for the ID
+//                            loopId = true;
+//                            System.out.println("Id is already added, try another one");
+//                            break;
+//                        } else
+//                            // if we did not find the ID in stdArray these mean its unique ID,hence, leave
+//                            // the loop
+//                            loopId = false;
+//                    }
+//                    break;
+//                }
+//
+//            }
+//        } while (loopId);
+//
+//        System.out.println("Enter student major: ");
+//        String major = sc.next().toUpperCase();
+//
+////		System.out.println(currDate);
+////		System.out.println(currDate.isAfter(compDate));
+//        if (currDate.isAfter(compDate)) {
+//            System.out.println("Enter student rank: ");
+//            rank = sc.next();
+//        } else
+//            rank = "-";
+//
+//        if (compType.equals("STUDENT")) {
+//            teamNum = "-";
+//            teamName = "-";
+//        } else {
+//            System.out.println("Enter team number: ");
+//            teamNum = sc.next();
+//            System.out.println("Enter team name");
+//            teamName = sc.next();
+//        }
+//        Student s1 = new Student(-1, name, id, major, rank, teamNum, teamName);
+//        for (Competition c : compArray)
+//            if (c.compName.equalsIgnoreCase(compName)) {
+//                c.stdArray.add(s1);
+//                sheetName = c.sheet;
+//            }
+//
+//        try {
+//            FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
+//
+//            Workbook wb = new XSSFWorkbook(file);
+//
+//            Sheet sheet = wb.getSheet(sheetName);
+//            XSSFRow RowItr = null;
+//
+////			System.out.println(sheet.getSheetName());
+//
+//            Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
+//
+//            if (compType.equals("STUDENT"))
+//                studentData.put("1", new Object[] { sheet.getLastRowNum() - 3, id, name, major, rank });
+//            else
+//                studentData.put("1",
+//                        new Object[] { sheet.getLastRowNum() - 3, id, name, major, teamNum, teamName, rank });
+//
+//            Set<String> keyid = studentData.keySet();
+//
+//            int rowid = sheet.getLastRowNum() + 1;
+//
+//            for (String key : keyid) {
+//                RowItr = (XSSFRow) sheet.createRow(rowid++);
+//                Object[] objectArr = studentData.get(key);
+//                int cellid = 0;
+//
+//                for (Object obj : objectArr) {
+//                    Cell cell = ((Row) RowItr).createCell(cellid++);
+//                    cell.setCellValue(obj.toString());
+//                }
+//            }
+//
+//            FileOutputStream out = new FileOutputStream(new File("Competitions Participations.xlsx"));
+//
+//            wb.write(out);
+//            wb.close();
+//            out.close();
+//
+//        } catch (Exception e) {
+//            System.out.println("Error: The competition does not exist.");
+//            System.out.println(e.getMessage());
+//        }
+//
+//        System.out.println("Done\n");
+//    }
 
-        do {
-            System.out.println("Enter the name of the comp: ");
-            compName = sc.next();
-            for (Competition c : compArray) {
-                if (compName.equalsIgnoreCase(c.compName) || compName.equalsIgnoreCase(c.sheet)) {
-                    System.out.println("The competition is already added. Please re-enter the competition name");
-                    x = true;
-                    break;
-                } else { // base case
-                    x = false;
-                }
-
-            }
-        } while (x);
-
-        System.out.println("Enter the URL of the comp: ");
-        String URL = sc.next();
-        System.out.println("Enter the date of the comp [yyyy-mm-dd]: ");
-        String date = sc.next();
-        date = dateParser(date);
-        String choice = "";
-        do {
-            System.out.println("Is the competition student based? [yes/no]");
-            choice = sc.next().toUpperCase();
-
-            if (choice.equals("YES") || choice.equals("NO")) {
-                loopStd = false;
-                if (choice.equals("YES")) {
-                    stdBased = true; // student based
-                    loopStd = false;
-                } // else => team based
-
-            } else // wrong input
-                loopStd = true;
-
-        } while (loopStd);
-        Competition c1 = new Competition(compName, URL, date, stdBased, compName);
-        compArray.add(c1);
-
-//		------------------
-//		Here we deal with the excel file
-        FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
-        Workbook wb = new XSSFWorkbook(file);
-        Sheet sheet = wb.createSheet(compName);
-        Row RowItr = null;
-
-        Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
-
-        studentData.put("1", new Object[] { "Competition Name", compName });
-        studentData.put("2", new Object[] { "Competition URL", URL });
-        studentData.put("3", new Object[] { "Competition date", date });
-//        studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
-//***** Now It is an actual empty row ✔
-
-
-        // Student based
-        if (stdBased)
-            studentData.put("5", new Object[] { "", "Student ID", "Student Name", "Major", "Rank" });
-        else
-            studentData.put("6",
-                    new Object[] { "", "Student ID", "Student Name", "Major", "team", "Team Name", "Rank" });
-
-        // writing the data into the sheets...
-
-        Set<String> keyid = studentData.keySet();
-
-        int rowid = 0;
-
-        for (String key : keyid) {
-            RowItr = sheet.createRow(rowid++);
-            Object[] objectArr = studentData.get(key);
-            int cellid = 0;
-
-            for (Object obj : objectArr) {
-                Cell cell = (RowItr).createCell(cellid++);
-                cell.setCellValue((String) obj);
-            }
-        }
-//		file.close();
-        FileOutputStream out = new FileOutputStream(new File("Competitions Participations.xlsx"));
-
-        wb.write(out);
-        wb.close();
-        out.close();
-
-        System.out.println("Done\n");
-
-    }
-
-    public void addStudent() throws InvalidFormatException, IOException, NullPointerException {
+    public static void addStudent( String compName , String name , String id  , String major , String rank , String teamNum , String teamName ) throws InvalidFormatException, IOException, NullPointerException {
         // First student will be at ROW6!
-        Scanner sc = new Scanner(System.in);
         boolean loopId = false, cNameCheck = false;
 
-        // Printing comp names
-        System.out.print("\nCompetition names: ");
-        for (Competition c : compArray)
-            System.out.print(c.compName + " - ");
-
-        String teamNum = "-", teamName = "-", compType = "", rank = "", id = "", sheetName = "";
+        major = major.toUpperCase();
+        String compType = "", sheetName = "";
         LocalDate currDate = LocalDate.now();
         LocalDate compDate = null;
 
         System.out.println("\n\nStart the process of adding a student");
 
-        System.out.println("Enter competition name: ");
-        String compName = sc.next();
         for (Competition c : compArray) {
 //			System.out.println(c.compName); //checking
             if (compName.equalsIgnoreCase(c.compName))
                 cNameCheck = true;
         }
-        if (!cNameCheck)
+        if (!cNameCheck) // may not need it
             throw new IllegalArgumentException("There is no competition with this name! ");
 
         // Automating competition type & student Rank
@@ -309,25 +441,19 @@ public class MySystem {
                     compType = "STUDENT";
 
                 compDate = LocalDate.parse(c.CompDate); // to get competition date
-
             }
 
-        System.out.println("Enter student first name: ");
-        String name = sc.next();
-        System.out.println("Enter student last name: ");
-        name += " " + sc.next();
-
         do {
-            System.out.println("Enter student ID: ");
-            id = sc.next();
             for (Competition c : compArray) {
                 if (c.compName.equalsIgnoreCase(compName)) {
                     for (Student s : c.stdArray) {
                         if (s.id.equals(id)) {
                             // once we find the ID we stop &leave student loop, but we ask again for the ID
                             loopId = true;
+//****** Think about this case Abd
                             System.out.println("Id is already added, try another one");
-                            break;
+                            throw new IllegalArgumentException() ;
+//                            break;
                         } else
                             // if we did not find the ID in stdArray these mean its unique ID,hence, leave
                             // the loop
@@ -339,27 +465,17 @@ public class MySystem {
             }
         } while (loopId);
 
-        System.out.println("Enter student major: ");
-        String major = sc.next().toUpperCase();
-
-//		System.out.println(currDate);
-//		System.out.println(currDate.isAfter(compDate));
         if (currDate.isAfter(compDate)) {
-            System.out.println("Enter student rank: ");
-            rank = sc.next();
+//            System.out.println("Enter student rank: ");
         } else
             rank = "-";
 
         if (compType.equals("STUDENT")) {
             teamNum = "-";
             teamName = "-";
-        } else {
-            System.out.println("Enter team number: ");
-            teamNum = sc.next();
-            System.out.println("Enter team name");
-            teamName = sc.next();
         }
-        Student s1 = new Student(-1, name, id, major, rank, teamNum, teamName);
+
+        Student s1 = new Student( name, id, major, rank, teamNum, teamName);
         for (Competition c : compArray)
             if (c.compName.equalsIgnoreCase(compName)) {
                 c.stdArray.add(s1);
@@ -409,7 +525,8 @@ public class MySystem {
             System.out.println("Error: The competition does not exist.");
             System.out.println(e.getMessage());
         }
-
+        read(); //I think will set the serial right
+        System.out.println(teamName + "|"+ teamNum );
         System.out.println("Done\n");
     }
 
@@ -478,7 +595,7 @@ public class MySystem {
                         Row RowItr = null;
 
                         sheetIndex = wb.getSheetIndex(sheetName);
-                        wb.removeSheetAt(sheetIndex);
+                        wb.removeSheetAt(sheetIndex);//?
                         Sheet sheet = wb.createSheet(sheetName);
 
                         Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
@@ -486,7 +603,7 @@ public class MySystem {
                         studentData.put("1", new Object[] { "Competition Name", c.compName });
                         studentData.put("2", new Object[] { "Competition URL", c.compURL });
                         studentData.put("3", new Object[] { "Competition date", c.CompDate });
-                        studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
+//                        studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
 
                         // Student based
 
@@ -593,7 +710,7 @@ public class MySystem {
 //  2000-10-23
 //	2-Oct-21
 
-    String dateParser(String date) throws ParseException {
+    static String dateParser(String date) throws ParseException {
 //		MM gives a number
 //		MMM give Oct
 //		MMMM gives October
@@ -695,7 +812,7 @@ public class MySystem {
                 studentData.put("1", new Object[] { "Competition Name", c.compName });
                 studentData.put("2", new Object[] { "Competition URL", c.compURL });
                 studentData.put("3", new Object[] { "Competition date", c.CompDate });
-                studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
+//                studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
 
                 // Student based
 
@@ -774,16 +891,193 @@ public class MySystem {
             System.out.println("There is no competition with this name.");
     }
 
+//********************
+
+
+        // _____________________________
+        // D*** write() no need
+        public static boolean isValid(final String date) {
+
+            boolean valid = false;
+
+            try {
+
+                // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
+                LocalDate.parse(date,
+                        DateTimeFormatter.ofPattern("uuuu-MM-dd")
+                                .withResolverStyle(ResolverStyle.STRICT)
+                );
+
+                valid = true;
+
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                valid = false;
+            }
+
+            return valid;
+        }
+        public static void addCompetition(String t1,String t2,String t3,boolean t4) throws IOException, InvalidFormatException, ParseException {
+
+//		if(t3.substring(8).length()==1||!t3.substring(7,8).equals("-")) {
+//			System.out.println("Date 2");
+//			Alert alert = new Alert(AlertType.INFORMATION);
+//			alert.setTitle("Addidtion faild");
+//			alert.setHeaderText("The competition date format is not valid. Please re-enter the competition date");
+//			alert.setContentText("");
+//
+//			alert.showAndWait();
+//			return;
+
+            //2001-01-01
+//		}
+            MySystem.read();
+            boolean stdBased = t4;
+
+            System.out.println("Start the process of adding a team");
+            String compName = t1;//.toUpperCase()
+
+            System.out.println("here");
+
+            String URL = t2;
+
+            String date = t3;
+            date = dateParser(date);
+
+            Competition c1 = new Competition(compName, URL, date, stdBased, compName);
+            compArray.add(c1);
+
+
+
+//		------------------
+//		Here we deal with the excel file
+            FileInputStream file = new FileInputStream("Competitions Participations.xlsx");
+            Workbook wb = new XSSFWorkbook(file);
+            Sheet sheet = wb.createSheet(compName);
+            Row RowItr = null;
+
+            Map<String, Object[]> studentData = new TreeMap<String, Object[]>();
+
+            studentData.put("1", new Object[] { "Competition Name", compName });
+            studentData.put("2", new Object[] { "Competition URL", URL });
+            studentData.put("3", new Object[] { "Competition date", date });
+//            studentData.put("4", new Object[] { "", "", "", "", "" }); // leave an empty row
+
+            // Student based
+            if (stdBased)
+                studentData.put("5", new Object[] { "", "Student ID", "Student Name", "Major", "Rank" });
+            else
+                studentData.put("6",
+                        new Object[] { "", "Student ID", "Student Name", "Major", "team", "Team Name", "Rank" });
+
+            // writing the data into the sheets...
+
+            Set<String> keyid = studentData.keySet();
+
+            int rowid = 0;
+
+            for (String key : keyid) {
+                RowItr = sheet.createRow(rowid++);
+                Object[] objectArr = studentData.get(key);
+                int cellid = 0;
+
+                for (Object obj : objectArr) {
+                    Cell cell = (RowItr).createCell(cellid++);
+                    cell.setCellValue((String) obj);
+                }
+            }
+//		file.close();
+            FileOutputStream out = new FileOutputStream(new File("Competitions Participations.xlsx"));
+
+            wb.write(out);
+            wb.close();
+            out.close();
+
+            System.out.println("Done\n");
+
+        }
+
+        public static ArrayList<Competition> getCompArray() {
+            return compArray;
+        }
+
+
+
+//*************
+
+
+        public void OpenEmail() {
+            Scanner sc =new Scanner(System.in);
+            System.out.println("enter comp name");
+            String compName = sc.next();
+            boolean loopId = false;
+            do {
+                System.out.println("Enter student ID: ");
+                String stdID = sc.next();
+                for (int i = 0; i < compArray.size(); i++) {
+                    if (compArray.get(i).compName.equals(compName)) {
+
+                        for (int j = 0; j < compArray.get(i).stdArray.size(); j++) {
+                            if (compArray.get(i).stdArray.get(j).id.equals(stdID)) {
+                                loopId = true;
+                                String email="s"+compArray.get(i).stdArray.get(j).id+"@kfupm.edu.sa";
+                                String body="Dear "+compArray.get(i).stdArray.get(j).name+",%0D%0A%0D%0AConguratulation on your achievement in "+compArray.get(i).compName+". This achievement is deeply appreciated by the unversity and we will announce it in the approbrite medias.%0D%0A%0D%0AIn case you have Photos you want to share with the news post, reply to this email with the photos.%0D%0A%0D%0ARegards and Congrats,%0D%0A%0D%0A"
+                                        + "KFUPM News Team";
+                                String place ="-";
+                                if(!compArray.get(i).stdArray.get(j).rank.equals("-")) {
+                                    String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+                                    switch (Integer.parseInt(compArray.get(i).stdArray.get(j).rank) % 100) {
+                                        case 11:
+                                        case 12:
+                                        case 13:
+                                            place= Integer.parseInt(compArray.get(i).stdArray.get(j).rank) + "th";
+                                        default:
+                                            place= Integer.parseInt(compArray.get(i).stdArray.get(j).rank) + suffixes[Integer.parseInt(compArray.get(i).stdArray.get(j).rank) % 10];
+                                    }
+                                }
+
+                                System.out.println(body);
+                                try {
+                                    if(compArray.get(i).stdArray.get(j).teamName.equals("-")) {
+
+                                        Runtime.getRuntime().exec(
+                                                new String[] {"rundll32", "url.dll,FileProtocolHandler",
+                                                        "mailto:"+email+"?subject= Congratulation on achieving "+place+" place in "+compArray.get(i).compName+"&body="+body}, null
+                                        );
+                                    }
+                                    else {
+                                        body="Dear "+compArray.get(i).stdArray.get(j).name+"/"+compArray.get(i).stdArray.get(j).teamName+",%0D%0A%0D%0AConguratulation on your achievement in "+compArray.get(i).compName+". This achievement is deeply appreciated by the unversity and we will announce it in the approbrite medias.%0D%0A%0D%0AIn case you have Photos you want to share with the news post, reply to this email with the photos.%0D%0A%0D%0ARegards and Congrats,%0D%0A%0D%0A"
+                                                + "KFUPM News Team";
+                                        Runtime.getRuntime().exec(
+                                                new String[] {"rundll32", "url.dll,FileProtocolHandler",
+                                                        "mailto:"+email+"?subject= Congratulation on achieving "+place+" place in "+compArray.get(i).compName+"&body="+body}, null
+                                        );
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } while (!loopId);
+        }
+
+//  2000-10-23
+//	2-Oct-21
+
+//********************
+
     public static void main(String[] args) throws IOException, InvalidFormatException, ParseException {
         String option = "";
         boolean x = true;
         Scanner sc = new Scanner(System.in);
         MySystem sys = new MySystem();
 
-        sys.read();
+        read();
         sys.notifaction();
         while (x) {
-            sys.read();
+            read();
             // just to know that which comps were added
             System.out.print("Competitions: ");
             for (Competition c : compArray)
@@ -795,11 +1089,11 @@ public class MySystem {
 
             switch (option) {
                 case "1": {
-                    sys.addCompetition();
+//                    sys.addCompetition();
                     break;
                 }
                 case "2": {
-                    sys.addStudent();
+//                    sys.addStudent();
                     break;
                 }
                 case "3": {
