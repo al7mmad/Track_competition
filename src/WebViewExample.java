@@ -1,8 +1,10 @@
 
+
 import java.beans.EventHandler;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.util.Objects;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -12,6 +14,7 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.Scene;
@@ -26,7 +29,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import netscape.javascript.JSObject;
 
+
+// not fast take almost 2 min
 public class WebViewExample extends Application implements Observable {
 	Competition browseComp ;
 	String browseCompURL;
@@ -61,8 +68,7 @@ public class WebViewExample extends Application implements Observable {
 		 */
 
 		browseComp = comp;
-		browseCompURL =  "https://twitter.com/CyberhubSa"  ; // comp.compURL ; should be
-		// worked but not fine
+		browseCompURL =  comp.compURL; // should be
 	}
 
 	public void start(Stage Stage) {
@@ -98,6 +104,8 @@ public class WebViewExample extends Application implements Observable {
 		BorderPane borderPane = new BorderPane();
 		setCompetition(browseComp);
 		webView.getEngine();
+		//******************************
+
 		webView.getEngine().load(browseCompURL);
 		webView.getEngine();
 		UrlLabel.textProperty().bind(webView.getEngine().locationProperty());
