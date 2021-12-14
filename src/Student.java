@@ -1,4 +1,5 @@
 
+
 public class Student {
 	int serial ;
 	String teamNum;
@@ -11,6 +12,15 @@ public class Student {
 
 	public Student(String name, String id, String major, String rank, String teamNum, String teamName) {
 
+		this.teamNum = teamNum;
+		this.teamName = teamName;
+		this.name = name;
+		this.id = id;
+		this.major = major;
+		this.rank = rank;
+	}
+		public Student(int serial, String name, String id, String major, String rank, String teamNum, String teamName) {
+		this.serial = serial ;
 		this.teamNum = teamNum;
 		this.teamName = teamName;
 		this.name = name;
@@ -51,15 +61,7 @@ public class Student {
 		return number;
 	}
 
-	public Student(int serial, String name, String id, String major, String rank, String teamNum, String teamName) {
-		this.serial = serial ;
-		this.teamNum = teamNum;
-		this.teamName = teamName;
-		this.name = name;
-		this.id = id;
-		this.major = major;
-		this.rank = rank;
-	}
+
 
 	@Override
 	public String toString() {
