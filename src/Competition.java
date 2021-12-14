@@ -5,7 +5,7 @@ public class Competition {
 	String compURL;
 	String CompDate;
 	String sheet;
-	int number;
+	int numberOfStd;
 	boolean compTypeStd;
 	boolean notification;
 
@@ -20,10 +20,10 @@ public class Competition {
 	}
 
 	int getNumber() {
-		return number;
+		return numberOfStd;
 	}
 	void setNumber(int number) {
-		this.number= number;
+		this.numberOfStd = number;
 	}
 
 	@Override
