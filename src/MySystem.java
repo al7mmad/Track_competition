@@ -729,7 +729,8 @@ public class MySystem {
 
     }
 
-    public void notifaction() throws ParseException {
+    public static void notifaction() throws ParseException, FileNotFoundException, IOException {
+        MySystem.read();
         String currentDate, compD;
 
         LocalDate currDate = LocalDate.now();
@@ -752,11 +753,13 @@ public class MySystem {
                     }
                     // send a remainder to the news team
                     if (c.notification == false) {
-                        System.out.println(
-                                "Update the ranks for the " + c.compName + " competition\nDue Date was: " + compD);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Reminder!");
+                        alert.setHeaderText("Update the ranks for the " + c.compName + " competition\nDue Date was: " + compD);
+                        alert.setContentText("");
+                        alert.showAndWait();
                         c.notification = true;
                     }
-
                 } // notif is true
         }
     }
