@@ -6,12 +6,14 @@
 
 //import com.sun.media.sound.InvalidFormatException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -51,13 +53,31 @@ public class CompetitionApplication extends Application {
         BorderPane pane = new BorderPane();
 
         primaryStage.setScene(scene);
+
+//         Stage stage = new Stage(); //
+        primaryStage.setOnShowing(event -> {try {
+            MySystem.notifaction();
+        } catch (ParseException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }});
+
         primaryStage.show();
+//        stage.show();
+//        stage.close();
+
+
+
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         launch(args);
+        MySystem.read();
+
     }
 }
+
