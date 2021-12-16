@@ -120,7 +120,7 @@
                         <RadioButton fx:id="radStudBase1" layoutX="296.0" layoutY="181.0" mnemonicParsing="false" text="Yes" />
                      </children>
                   </Pane>
-                  <Pane fx:id="PaneAddStud" prefHeight="459.0" prefWidth="471.0">
+                  <Pane fx:id="PaneAddStud" prefHeight="459.0" prefWidth="471.0" visible="false">
                      <children>
                         <Label layoutX="62.0" layoutY="105.0" text="Enter student name:">
                            <font>
@@ -267,5 +267,6 @@
       </BorderPane>
    </children>
 </AnchorPane>
+
 
 
