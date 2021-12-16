@@ -262,10 +262,17 @@ public class Controller implements Initializable {
 
             @FXML
             private void btnViewCompetitionAction(ActionEvent event3) { //*****
+
+
                 ViewSpicficCompPane.setVisible(true);
-//                ViewCompsPane.setVisible(false);
                 PaneAddComp.setVisible(false); // create method that ensure that all panes are un visible
                 PaneAddStud.setVisible(false);
+
+                paneViewStdInfoTeam.setVisible(false);
+                paneViewStdInfo.setVisible(false);
+                TableTeamStd.setVisible(false);
+                TableSoloStd.setVisible(false);
+
 
                 serialNumCol.setCellValueFactory(new PropertyValueFactory<Student, Integer>("serial"));
                 stdIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -287,6 +294,9 @@ public class Controller implements Initializable {
 //                    System.out.println(MySystem.compArray.size());
 
                 menubtn.getItems().clear(); // Should clear the menu
+                menubtn.setText(null);
+                lbCompHLink.setText(null);
+                lbCompDate.setText(null);
                     for (int i = 0; i < MySystem.compArray.size(); i++) {
                         MenuItem mt = new MenuItem(MySystem.compArray.get(i).compName);
                         menubtn.getItems().add(mt);
@@ -509,11 +519,19 @@ public class Controller implements Initializable {
 //______________________________________________________
 @FXML
 private void btnAddStudAction(ActionEvent event) throws IOException {
+    comboCompABD.setText(null); // Let combo box choose first option which is empty
+    txtAddStud.setText("");
+    txtAddStudID.setText("");
+    txtAddStudMajor.setText("");
+    txtAddStudRank.setText("");
+    txtAddTeamNum.setText("");
+    txtAddTeamName.setText("");
 
     PaneAddStud.setVisible(true);
     PaneAddComp.setVisible(false);
     ViewSpicficCompPane.setVisible(false);
     PaneAddStudExtra.setVisible(false);
+    txtAddStud.setText(null);
 
 // Already read before in the consil menu I think
     MySystem.read();
@@ -640,9 +658,3 @@ private void btnAddStudAction(ActionEvent event) throws IOException {
 
     }
 }
-
-
-
-
-
-
