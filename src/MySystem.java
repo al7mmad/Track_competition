@@ -440,10 +440,21 @@ public class MySystem {
 
                             System.out.println(body);
                             try {
-                                Runtime.getRuntime().exec(
-                                        new String[] {"rundll32", "url.dll,FileProtocolHandler",
-                                                "mailto:"+email+"?subject= Congratulation on achieving "+place+" place in "+compArray.get(i).compName+"&body="+body}, null
-                                );
+                                if(compArray.get(i).stdArray.get(j).teamName.equals("-")) {
+
+                                    Runtime.getRuntime().exec(
+                                            new String[] {"rundll32", "url.dll,FileProtocolHandler",
+                                                    "mailto:"+email+"?subject= Congratulation on achieving "+place+" place in "+compArray.get(i).compName+"&body="+body}, null
+                                    );
+                                }
+                                else {
+                                    body="Dear "+compArray.get(i).stdArray.get(j).name+"/"+compArray.get(i).stdArray.get(j).teamName+",%0D%0A%0D%0AConguratulation on your achievement in "+compArray.get(i).compName+". This achievement is deeply appreciated by the unversity and we will announce it in the approbrite medias.%0D%0A%0D%0AIn case you have Photos you want to share with the news post, reply to this email with the photos.%0D%0A%0D%0ARegards and Congrats,%0D%0A%0D%0A"
+                                            + "KFUPM News Team";
+                                    Runtime.getRuntime().exec(
+                                            new String[] {"rundll32", "url.dll,FileProtocolHandler",
+                                                    "mailto:"+email+"?subject= Congratulation on achieving "+place+" place in "+compArray.get(i).compName+"&body="+body}, null
+                                    );
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -453,6 +464,7 @@ public class MySystem {
             }
         } while (!loopId);
     }
+
 
 //  2000-10-23
 //	2-Oct-21
@@ -796,3 +808,68 @@ public class MySystem {
     }
 }
 //*********************************************************************************************************************
+//        while (x) {
+//                read();
+//                // just to know that which comps were added
+//                System.out.print("Competitions: ");
+//                for (Competition c : compArray)
+//                System.out.print(c.compName + " - ");
+//
+//                System.out.print(
+//                "\nEnter your choice?\n\t1) Add a competition\n\t2) Add a student to a competition\n\t3) notification \n\t4) View competitions \n\t5) Show a particular student \n\t6) Edit \n\t7) End \n\t8) Remove Student \n\t9) Remove Competition \n\t10) Run GUI \nEnter: ");
+//                option = sc.next();
+//
+//                switch (option) {
+//                case "1": {
+////                    sys.addCompetition();
+//                break;
+//                }
+//                case "2": {
+////                    sys.addStudent();
+//                break;
+//                }
+//                case "3": {
+//                sys.notifaction();
+//                break;
+//                }
+//                case "4": {
+//                sys.view();
+//                break;
+//                }
+//                case "5": {// show student in multiple comps
+//                sys.viewStudent();
+//                break;
+//                }
+//                case "6": {
+//                System.out.println("Enter competition: ");
+//                String comp = sc.next(), id = "";
+//                System.out.println("Enter student ID to edit");
+//                id = sc.next();
+//                sys.edit(comp, id);
+//                sys.read();
+//                break;
+//                }
+//                case "7": {
+//                System.out.println("Terminate");
+//                x = false;
+//                break;
+//                }
+//                case "8": {
+//                sys.deleteStudent();
+//                sys.read();
+//                break;
+//                }
+//                case "9": {
+//                sys.delComp();
+//                break;
+//                }
+//                case "10": {
+//                CompetitionApplication.main(null);
+//                break;
+//                }
+//
+//default: {
+//        System.out.println("Invalid option");
+//        }
+//        }
+//        }
