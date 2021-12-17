@@ -592,6 +592,9 @@ private void btnAddStudAction(ActionEvent event) throws IOException {
         id = txtAddStudID.getText();
         major = txtAddStudMajor.getText().toUpperCase();
         rank = txtAddStudRank.getText();
+        if(rank.equals("")){
+            rank="-";
+        }
 
         if(!Competition.search(competitionName).compTypeStd){ //team based
             teamNum = txtAddTeamNum.getText();
@@ -658,3 +661,8 @@ private void btnAddStudAction(ActionEvent event) throws IOException {
 
     }
 }
+
+
+
+
+
